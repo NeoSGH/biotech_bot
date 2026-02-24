@@ -1,6 +1,18 @@
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import os
+import asyncio
+from aiohttp import web
+import os
+
+async def keep_alive():
+    app = web.Application()
+    app.router.add_get("/", lambda request: web.Response(text="ok"))
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", int(os.environ.get("PORT", 10000)))
+    await site.start()
+
 
 TOKEN = os.getenv("BOT_TOKEN")
 
@@ -238,4 +250,6 @@ async def back_to_start(message: types.Message):
 # --- Запуск ---
 
 if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    loop.create_task(keep_alive())
     executor.start_polling(dp, skip_updates=True)
