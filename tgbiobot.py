@@ -65,7 +65,7 @@ test_menu.add(
     KeyboardButton("🧪 Тест 2 (в разработке)")
 )
 test_menu.add(
-    KeyboardButton("🧪 Тест 3 (в разработке)"),
+    KeyboardButton("🧬 Тест 3: Эволюция"),
     KeyboardButton("🧪 Тест 4 (в разработке)")
 )
 test_menu.add(
@@ -200,6 +200,15 @@ async def test_mendel(message: types.Message):
         message,
         "🧪 Тест по теме «Законы Грегора Менделя»:\n\n"
         "https://forms.gle/SKaReKaXnxSkPGDC7",
+        back_menu
+    )
+    
+@dp.message_handler(lambda message: message.text == "🧬 Тест 3: Эволюция")
+async def test_mendel(message: types.Message):
+    await send_clean_message(
+        message,
+        "🧪 Тест по теме «Эволюция»:\n\n"
+        "https://forms.gle/Psy2jKTJnNGjE85T7",
         back_menu
     )
 
