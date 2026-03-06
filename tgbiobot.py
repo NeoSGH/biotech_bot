@@ -5,6 +5,7 @@ import asyncio
 from aiohttp import web
 import os
 
+
 async def keep_alive():
     app = web.Application()
     app.router.add_get("/", lambda request: web.Response(text="ok"))
@@ -25,13 +26,20 @@ last_bot_message = {}
 
 main_menu = ReplyKeyboardMarkup(resize_keyboard=True)
 main_menu.add(
-    KeyboardButton("📹 Видео-уроки"),
-    KeyboardButton("📝 Тесты к урокам")
+    KeyboardButton("🧬 Биология"),
+    KeyboardButton("🌿 Экология")
 )
 main_menu.add(
     KeyboardButton("ℹ️ О проекте"),
     KeyboardButton("✉️ Обратная связь")
 )
+
+biology_menu = ReplyKeyboardMarkup(resize_keyboard=True)
+biology_menu.add(
+    KeyboardButton("📹 Видео-уроки"),
+    KeyboardButton("📝 Тесты к урокам")
+)
+biology_menu.add(KeyboardButton("🔙 Вернуться в начало"))
 
 back_menu = ReplyKeyboardMarkup(resize_keyboard=True)
 back_menu.add(KeyboardButton("🔙 Вернуться в начало"))
@@ -78,6 +86,15 @@ test_menu.add(
 )
 test_menu.add(KeyboardButton("🔙 Вернуться в начало"))
 
+# --- Экология ---
+
+eco_menu = ReplyKeyboardMarkup(resize_keyboard=True)
+eco_menu.add(
+    KeyboardButton("🌍 Эко-уроки"),
+    KeyboardButton("♻️ Эко-тест")
+)
+eco_menu.add(KeyboardButton("🔙 Вернуться в начало"))
+
 # --- Вспомогательная функция ---
 
 async def send_clean_message(message: types.Message, text: str, keyboard):
@@ -115,6 +132,24 @@ async def start(message: types.Message):
         main_menu
     )
 
+# --- Разделы ---
+
+@dp.message_handler(lambda message: message.text == "🧬 Биология")
+async def biology_section(message: types.Message):
+    await send_clean_message(
+        message,
+        "Раздел «Биология» 🧬\nВыберите нужную функцию по кнопкам ниже 👇",
+        biology_menu
+    )
+
+@dp.message_handler(lambda message: message.text == "🌿 Экология")
+async def ecology_section(message: types.Message):
+    await send_clean_message(
+        message,
+        "Раздел «Экология» 🌿\nВыберите нужную функцию по кнопкам ниже 👇",
+        eco_menu
+    )
+
 # --- Видео ---
 
 @dp.message_handler(lambda message: message.text == "📹 Видео-уроки")
@@ -146,7 +181,7 @@ async def lesson_cell_cycle(message: types.Message):
     )
 
 @dp.message_handler(lambda message: message.text == "3️⃣ Эволюция. Дарвин и другие.")
-async def lesson_cell_cycle(message: types.Message):
+async def lesson_evolution(message: types.Message):
     await send_clean_message(
         message,
         "🌱 Урок 3:\n"
@@ -156,7 +191,7 @@ async def lesson_cell_cycle(message: types.Message):
     )
 
 @dp.message_handler(lambda message: message.text == "4️⃣ Наследственные болезни человека: классификация и методы лечения.")
-async def lesson_cell_cycle(message: types.Message):
+async def lesson_heredity(message: types.Message):
     await send_clean_message(
         message,
         "🌱 Урок 4:\n"
@@ -166,7 +201,7 @@ async def lesson_cell_cycle(message: types.Message):
     )
 
 @dp.message_handler(lambda message: message.text == "5️⃣ Микробиология: ДНК, РНК и синтез белка.")
-async def lesson_cell_cycle(message: types.Message):
+async def lesson_microbiology(message: types.Message):
     await send_clean_message(
         message,
         "🌱 Урок 5:\n"
@@ -202,9 +237,9 @@ async def test_mendel(message: types.Message):
         "https://forms.gle/SKaReKaXnxSkPGDC7",
         back_menu
     )
-    
+
 @dp.message_handler(lambda message: message.text == "🧬 Тест 3: Эволюция")
-async def test_mendel(message: types.Message):
+async def test_evolution(message: types.Message):
     await send_clean_message(
         message,
         "🧪 Тест по теме «Эволюция»:\n\n"
@@ -218,6 +253,31 @@ async def empty_tests(message: types.Message):
     await send_clean_message(
         message,
         "Этот тест пока в разработке 🧠\nОн скоро появится.",
+        back_menu
+    )
+
+# --- Экология ---
+
+@dp.message_handler(lambda message: message.text == "🌍 Эко-уроки")
+async def eco_lessons(message: types.Message):
+    await send_clean_message(
+        message,
+        "🌿 Эко-урок:\n"
+        "Экология — это наука о взаимодействии живых организмов между собой и с окружающей средой.\n\n"
+        "Что важно помнить:\n"
+        "• беречь воду и электричество\n"
+        "• сортировать отходы\n"
+        "• использовать меньше пластика\n"
+        "• заботиться о растениях и животных\n\n"
+        "Экологичное мышление начинается с маленьких шагов каждый день.",
+        back_menu
+    )
+
+@dp.message_handler(lambda message: message.text == "♻️ Эко-тест")
+async def eco_test(message: types.Message):
+    await send_clean_message(
+        message,
+        "♻️ Эко-тест скоро появится!\nМы уже готовим задания по экологическим привычкам и охране природы.",
         back_menu
     )
 
@@ -239,8 +299,8 @@ async def info_and_feedback(message: types.Message):
     else:
         await send_clean_message(
             message,
-            "Этот проект — бот-репетитор по биологии 🌱\n"
-            "Видео, объяснения и тесты для закрепления знаний.\n"
+            "BioHelper — образовательный бот по биологии и экологии 🧬🌿\n"
+            "Здесь собраны видео-уроки, тесты и полезные экологические материалы для школьников.\n"
             "    \n"
             "Авторы данного проекта: ученики 10В класса КГУ Гимназии №34, Кривонос Артём и Сарсенказы Алибек.\n"
             "Научный руководитель проекта: Алыбаева Лилиана Яковлевна.",
