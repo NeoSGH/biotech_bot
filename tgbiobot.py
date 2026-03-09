@@ -90,8 +90,8 @@ test_menu.add(KeyboardButton("🔙 Вернуться в начало"))
 
 eco_menu = ReplyKeyboardMarkup(resize_keyboard=True)
 eco_menu.add(
-    KeyboardButton("🌍 Эко-уроки"),
-    KeyboardButton("♻️ Эко-тест")
+    KeyboardButton("🌍 Эко-лайфхаки"),
+    KeyboardButton("🌿 Пункты приема в Алматы")
 )
 eco_menu.add(KeyboardButton("🔙 Вернуться в начало"))
 
@@ -258,26 +258,19 @@ async def empty_tests(message: types.Message):
 
 # --- Экология ---
 
-@dp.message_handler(lambda message: message.text == "🌍 Эко-уроки")
+@dp.message_handler(lambda message: message.text == "🌍 Эко-лайфхаки")
 async def eco_lessons(message: types.Message):
     await send_clean_message(
         message,
-        "🌿 Эко-урок:\n"
-        "Экология — это наука о взаимодействии живых организмов между собой и с окружающей средой.\n\n"
-        "Что важно помнить:\n"
-        "• беречь воду и электричество\n"
-        "• сортировать отходы\n"
-        "• использовать меньше пластика\n"
-        "• заботиться о растениях и животных\n\n"
-        "Экологичное мышление начинается с маленьких шагов каждый день.",
+        "🌿 Эко-лайфхаки скоро появятся!",
         back_menu
     )
 
-@dp.message_handler(lambda message: message.text == "♻️ Эко-тест")
+@dp.message_handler(lambda message: message.text == "🌿 Пункты приема в Алматы")
 async def eco_test(message: types.Message):
     await send_clean_message(
         message,
-        "♻️ Эко-тест скоро появится!\nМы уже готовим задания по экологическим привычкам и охране природы.",
+        "Пункты приема в Алматы скоро появятся!",
         back_menu
     )
 
